@@ -4,178 +4,278 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>AstralSMP – Minecraft Netzwerk</title>
+<meta name="description" content="AstralSMP: Minecraft-Netzwerk mit SMP- und Event-Server. Server-IP: astralsmp.net">
+<meta name="theme-color" content="#190f2e">
+<meta property="og:title" content="AstralSMP – Minecraft Netzwerk">
+<meta property="og:description" content="SMP- und Event-Server mit eigenen Features. Server-IP: astralsmp.net">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@500;700&family=Nunito:wght@400;600;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#120d1f; --panel:#1c1530; --line:#33275a; --text:#ece6fa; --muted:#a99ccb;
-  --accent:#a66bff; --accent-ink:#12082a; --shade:#7a3fe0;
-  color-scheme:dark;
-  box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+  --bg:#190f2e; --panel:#22153f; --line:#3b2a66; --text:#f5f1ff; --muted:#b2a6d1;
+  --accent:#c4a1ff; --on-accent:#1a0f30; --gold:#ffcf5c;
+  color-scheme:dark; box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
 }
 @media (prefers-color-scheme: light){
-  :root:not([data-theme="dark"]){--bg:#f4f0fb;--panel:#ffffff;--line:#d8cdf0;--text:#1f1533;--muted:#6a5c8a;--accent:#7a3fe0;--accent-ink:#fff;--shade:#5a2bb0;color-scheme:light}
+  :root:not([data-theme="dark"]){--bg:#f6f2ff;--panel:#ffffff;--line:#dcd1f3;--text:#1e1336;--muted:#62577f;--accent:#5b2fd0;--on-accent:#ffffff;--gold:#b7791f;color-scheme:light}
 }
-:root[data-theme="light"]{--bg:#f4f0fb;--panel:#ffffff;--line:#d8cdf0;--text:#1f1533;--muted:#6a5c8a;--accent:#7a3fe0;--accent-ink:#fff;--shade:#5a2bb0;color-scheme:light}
+:root[data-theme="light"]{--bg:#f6f2ff;--panel:#ffffff;--line:#dcd1f3;--text:#1e1336;--muted:#62577f;--accent:#5b2fd0;--on-accent:#ffffff;--gold:#b7791f;color-scheme:light}
 *,*::before,*::after{box-sizing:inherit}
-html{scroll-padding-top:70px;scroll-behavior:smooth}
-body{margin:0;background:var(--bg);color:var(--text);font:400 17px/1.65 Nunito,system-ui,sans-serif}
-h1,h2,h3{font-family:'Pixelify Sans',monospace,sans-serif;font-weight:700;line-height:1.15;margin:0}
+html{scroll-padding-top:80px;scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);font:400 17px/1.65 "Instrument Sans",system-ui,sans-serif}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--bg);z-index:11}
+h1,h2,h3{font-family:"Bricolage Grotesque","Instrument Sans",sans-serif;margin:0;line-height:1.05}
 a{color:inherit}
-:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
-.wrap{max-width:960px;margin:0 auto;padding:0 20px}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.wrap{max-width:1040px;margin:0 auto;padding:0 24px}
 
-nav{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:2px solid var(--line)}
-nav .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;height:58px;overflow-x:auto}
-.logo{font-family:'Pixelify Sans',monospace;font-weight:700;font-size:22px;text-decoration:none;white-space:nowrap}
-.logo span{color:var(--accent)}
-nav ul{display:flex;gap:20px;list-style:none;margin:0;padding:0}
-nav li a{text-decoration:none;color:var(--muted);font-weight:600;white-space:nowrap}
-nav li a:hover{color:var(--text)}
+header.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;background:var(--bg);border-bottom:1px solid var(--line)}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;height:64px;gap:24px}
+.logo{display:flex;align-items:center;gap:9px;font:800 20px "Bricolage Grotesque",sans-serif;text-decoration:none}
+.logo svg{width:22px;height:22px;color:var(--gold)}
+.nav nav{display:flex;align-items:center;gap:28px}
+.nav nav a{text-decoration:none;color:var(--muted);font-weight:500;font-size:15px}
+.nav nav a:hover{color:var(--text)}
+.nav nav a.pill{color:var(--on-accent);background:var(--accent);padding:8px 16px;border-radius:6px;font-weight:600}
+.nav nav a.pill:hover{color:var(--on-accent);opacity:.9}
 
-.hero{padding:72px 0 56px;border-bottom:2px solid var(--line);
-  background:
-    linear-gradient(var(--bg) 0 0) padding-box,
-    repeating-linear-gradient(90deg,transparent 0 47px,var(--line) 47px 48px);
-  background-blend-mode:normal}
-.hero h1{font-size:clamp(38px,8vw,72px);max-width:12ch}
-.hero p.lead{max-width:48ch;color:var(--muted);font-size:19px;margin:18px 0 32px}
-.ip{display:flex;flex-wrap:wrap;align-items:stretch;gap:0;max-width:520px;border:3px solid var(--accent);background:var(--panel)}
-.ip code{flex:1;min-width:180px;padding:14px 18px;font:700 22px 'Pixelify Sans',monospace;display:flex;align-items:center}
-.ip button{border:0;background:var(--accent);color:var(--accent-ink);font:700 18px 'Pixelify Sans',monospace;padding:0 22px;min-height:52px;cursor:pointer;border-left:3px solid var(--accent);box-shadow:inset 0 -5px 0 var(--shade)}
-.ip button:active{transform:translateY(2px)}
-.status{margin-top:14px;color:var(--muted);font-size:15px}
-.dot{display:inline-block;width:10px;height:10px;background:var(--accent);margin-right:8px}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:0 24px;border-radius:6px;font:600 16px "Instrument Sans",sans-serif;text-decoration:none;border:1.5px solid var(--accent);color:var(--accent);background:transparent;cursor:pointer}
+.btn:hover{background:var(--accent);color:var(--on-accent)}
+.btn.solid{background:var(--accent);color:var(--on-accent)}
+.btn.solid:hover{opacity:.9}
 
-section{padding:64px 0;border-bottom:2px solid var(--line)}
-section h2{font-size:clamp(28px,5vw,40px);margin-bottom:10px}
-section .sub{color:var(--muted);max-width:56ch;margin:0 0 32px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px}
-.card{background:var(--panel);border:2px solid var(--line);padding:22px;box-shadow:5px 5px 0 var(--line)}
-.card h3{font-size:21px;margin-bottom:8px}
-.card p{margin:0;color:var(--muted)}
+.hero{position:relative;overflow:hidden;padding:112px 0 104px;border-bottom:1px solid var(--line)}
+.hero .star{position:absolute;right:-120px;top:50%;width:560px;height:560px;transform:translateY(-50%);color:var(--accent);opacity:.4;pointer-events:none}
+.hero .star path{fill:none;stroke:currentColor;stroke-width:1.5px;vector-effect:non-scaling-stroke;stroke-linejoin:round}
+.hero .wrap{position:relative}
+.hero h1{font-weight:800;font-size:clamp(56px,12vw,132px);letter-spacing:-.035em;line-height:.92;margin-bottom:28px}
+.hero .lead{max-width:38ch;font-size:21px;color:var(--muted);margin:0 0 40px}
+.ip{display:inline-flex;align-items:stretch;border:1.5px solid var(--line);border-radius:6px;background:var(--panel);overflow:hidden;max-width:100%}
+.ip span{display:flex;align-items:center;padding:0 20px;font:600 20px "Instrument Sans",sans-serif}
+.ip button{border:0;background:var(--accent);color:var(--on-accent);font:600 15px "Instrument Sans",sans-serif;padding:0 22px;min-height:52px;cursor:pointer}
+.ip button:hover{opacity:.9}
+.hint{margin:16px 0 0;font-size:15px;color:var(--muted)}
 
-ol.rules{margin:0;padding:0;list-style:none;counter-reset:r;display:grid;gap:12px;max-width:680px}
-ol.rules li{counter-increment:r;display:flex;gap:16px;background:var(--panel);border:2px solid var(--line);padding:16px 18px}
-ol.rules li::before{content:counter(r);font:700 22px 'Pixelify Sans',monospace;color:var(--accent);min-width:1.4em}
+.sec{display:grid;grid-template-columns:200px 1fr;gap:48px;padding:88px 0;border-bottom:1px solid var(--line)}
+.sec>h2{font-size:30px;font-weight:800;letter-spacing:-.02em}
 
-.steps{display:grid;gap:12px;max-width:680px;margin:0;padding:0;list-style:none}
-.steps li{background:var(--panel);border:2px solid var(--line);padding:16px 18px}
-.steps b{font-family:'Pixelify Sans',monospace;font-size:19px}
+.panels{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.panel{border-radius:8px;padding:34px;border:1.5px solid var(--line);background:var(--panel)}
+.panel.fill{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.panel h3{font-size:28px;font-weight:800;letter-spacing:-.02em;margin-bottom:12px}
+.panel p{margin:0;color:var(--muted)}
+.panel.fill p{color:var(--on-accent);opacity:.85}
+.feat{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;margin-top:48px}
+.feat div{border-top:1.5px solid var(--line);padding-top:18px}
+.feat h3{font-size:19px;font-weight:600;margin-bottom:6px;letter-spacing:-.005em}
+.feat p{margin:0;color:var(--muted);font-size:16px}
 
-details{background:var(--panel);border:2px solid var(--line);padding:14px 18px;max-width:680px;margin-bottom:10px}
-summary{cursor:pointer;font-weight:800}
-details p{margin:10px 0 0;color:var(--muted)}
+ol.steps,ul.rules{list-style:none;margin:0;padding:0}
+ol.steps li{display:grid;grid-template-columns:56px 1fr 1.3fr;gap:20px;align-items:baseline;padding:22px 0;border-top:1.5px solid var(--line)}
+ol.steps li:last-child,ul.rules li:last-child{border-bottom:1.5px solid var(--line)}
+.num{font:800 30px "Bricolage Grotesque",sans-serif;color:var(--accent)}
+ol.steps h3{font-size:21px;font-weight:600}
+ol.steps p{margin:0;color:var(--muted)}
+ol.steps b{color:var(--text);font-weight:600}
+ul.rules li{padding:20px 0;border-top:1.5px solid var(--line);font-size:19px}
 
-.links{display:flex;flex-wrap:wrap;gap:14px}
-.btn{display:inline-block;text-decoration:none;font:700 18px 'Pixelify Sans',monospace;padding:13px 22px;border:3px solid var(--accent);color:var(--text);background:var(--panel)}
-.btn.main{background:var(--accent);color:var(--accent-ink);box-shadow:inset 0 -5px 0 var(--shade)}
-.btn:hover{filter:brightness(1.1)}
+.faq details{border-top:1.5px solid var(--line)}
+.faq details:last-child{border-bottom:1.5px solid var(--line)}
+summary{cursor:pointer;font-weight:600;font-size:19px;padding:22px 0;list-style:none;display:flex;justify-content:space-between;gap:16px}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";color:var(--accent);font-size:26px;line-height:1}
+details[open] summary::after{content:"–"}
+details p{margin:-6px 0 22px;color:var(--muted);max-width:52ch}
 
-footer{padding:34px 0;color:var(--muted);font-size:14px}
+.band{background:var(--accent);color:var(--on-accent);padding:80px 0}
+.band .wrap{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:32px}
+.band h2{font-size:clamp(34px,6vw,56px);font-weight:800;letter-spacing:-.03em;margin-bottom:10px}
+.band p{margin:0;font-size:19px;opacity:.85}
+.band .btns{display:flex;flex-wrap:wrap;gap:12px}
+.band .btn{border-color:var(--on-accent);color:var(--on-accent)}
+.band .btn:hover{background:var(--on-accent);color:var(--accent)}
+.band .btn.solid{background:var(--on-accent);color:var(--accent)}
+.band .btn.solid:hover{opacity:.9}
+
+footer{padding:32px 0;color:var(--muted);font-size:14px}
+footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px}
+
+.sec[hidden]{display:none}
+.news{display:grid;grid-template-columns:150px 1fr;gap:20px;padding:24px 0;border-top:1.5px solid var(--line)}
+.news:last-child{border-bottom:1.5px solid var(--line)}
+.news .meta{display:flex;flex-direction:column;align-items:flex-start;gap:8px;color:var(--muted);font-size:15px}
+.badge{background:var(--gold);color:var(--bg);font:600 13px "Instrument Sans",sans-serif;padding:2px 9px;border-radius:4px}
+.news h3{font-size:22px;font-weight:600;margin-bottom:6px}
+.news p{margin:0;color:var(--muted)}
+.more{display:inline-block;margin-top:10px;color:var(--accent);font-weight:600}
+.empty{margin:0;color:var(--muted)}
+.infos{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.info{border:1.5px solid var(--line);border-radius:8px;background:var(--panel);padding:22px}
+.info h3{font-size:19px;font-weight:600;margin-bottom:6px}
+.info p{margin:0;color:var(--muted);font-size:16px}
+@media (max-width:820px){.news{grid-template-columns:1fr;gap:8px}.news .meta{flex-direction:row;align-items:center}}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
-@media (max-width:640px){nav ul{gap:14px}.hero{padding:48px 0 40px}section{padding:48px 0}}
+@media (max-width:820px){
+  .sec{grid-template-columns:1fr;gap:28px;padding:60px 0}
+  .panels,.feat{grid-template-columns:1fr}
+  ol.steps li{grid-template-columns:44px 1fr;row-gap:4px}
+  ol.steps li p{grid-column:2}
+  .hero{padding:72px 0 64px}
+  .hero .star{width:380px;height:380px;right:-140px;top:30%}
+  .nav nav a:not(.pill){display:none}
+}
 </style>
 </head>
 <body>
 
-<nav>
+<header class="nav">
   <div class="wrap">
-    <a class="logo" href="#top">Astral<span>SMP</span></a>
-    <ul>
-      <li><a href="#about">Server</a></li>
-      <li><a href="#join">Beitreten</a></li>
-      <li><a href="#rules">Regeln</a></li>
-      <li><a href="#faq">FAQ</a></li>
-      <li><a href="#contact">Kontakt</a></li>
-    </ul>
-  </div>
-</nav>
-
-<header class="hero" id="top">
-  <div class="wrap">
-    <h1>AstralSMP</h1>
-    <p class="lead">Unser Netzwerk mit SMP- und Event-Server, eigenen Features und einer aktiven Community.</p>
-    <div class="ip">
-      <code id="ip">astralsmp.net</code>
-      <button id="copy" type="button">IP kopieren</button>
-    </div>
-    <div class="status"><span class="dot"></span>Java Edition · SMP &amp; Events</div>
+    <a class="logo" href="#top" aria-label="AstralSMP Startseite">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 1.5l2.7 7.3 7.3 2.7-7.3 2.7L12 21.5l-2.7-7.3L2 11.5l7.3-2.7z"/></svg>
+      AstralSMP
+    </a>
+    <nav>
+      <a href="#news">News</a>
+      <a href="#infos">Infos</a>
+      <a href="#server">Server</a>
+      <a href="#join">Beitreten</a>
+      <a href="#rules">Regeln</a>
+      <a href="#faq">Fragen</a>
+      <a class="pill" href="https://discord.gg/74FPNwA3fn" target="_blank" rel="noopener">Discord</a>
+    </nav>
   </div>
 </header>
 
-<section id="about">
-  <div class="wrap">
-    <h2>Unsere Server</h2>
-    <p class="sub">AstralSMP besteht aus zwei Servern. Beide erreichst du über dieselbe Adresse.</p>
-    <div class="grid">
-      <div class="card"><h3>SMP-Server</h3><p>Ein Survival-Multiplayer im Stil bekannter YouTuber-SMPs, aber mit eigenen Features, Story und Community.</p></div>
-      <div class="card"><h3>Event-Server</h3><p>Regelmäßige Events, Minigames und Turniere. Hier gewinnst du Ruhm und Belohnungen.</p></div>
-      <div class="card"><h3>Eigene Features</h3><p>Eigene Features und Mechaniken, die du so auf keinem anderen Server findest.</p></div>
-      <div class="card"><h3>Fair</h3><p>Anti-Cheat und regelmäßige Backups. Alles ist frei spielbar, es gibt nichts zu kaufen.</p></div>
+<main id="top">
+  <div class="hero">
+    <svg class="star" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5l2.7 7.3 7.3 2.7-7.3 2.7L12 21.5l-2.7-7.3L2 11.5l7.3-2.7z"/></svg>
+    <div class="wrap">
+      <h1>AstralSMP</h1>
+      <p class="lead">SMP und Events in einem Netzwerk. Mit eigenen Features und ohne kaufbare Vorteile.</p>
+      <div class="ip">
+        <span id="ip">astralsmp.net</span>
+        <button id="copy" type="button">Kopieren</button>
+      </div>
+      <p class="hint">Minecraft Java Edition</p>
     </div>
   </div>
-</section>
 
-<section id="join">
   <div class="wrap">
-    <h2>So trittst du bei</h2>
-    <p class="sub">In drei Schritten bist du auf dem Server.</p>
-    <ol class="steps">
-      <li><b>Minecraft starten</b><br>Öffne Minecraft Java Edition.</li>
-      <li><b>Server hinzufügen</b><br>Mehrspieler → Server hinzufügen → die IP <b>astralsmp.net</b> eintragen.</li>
-      <li><b>Regeln lesen und loslegen</b><br>Schau kurz in die Regeln und tritt danach unserem Discord bei.</li>
-    </ol>
+    <section class="sec" id="news">
+      <h2>News</h2>
+      <div id="news-list"></div>
+    </section>
+
+    <section class="sec" id="infos">
+      <h2>Infos</h2>
+      <div class="infos" id="info-list"></div>
+    </section>
+
+    <section class="sec" id="server">
+      <h2>Die Server</h2>
+      <div>
+        <div class="panels">
+          <div class="panel fill">
+            <h3>SMP-Server</h3>
+            <p>Survival-Multiplayer im Stil bekannter YouTuber-SMPs, aber mit eigenen Features und eigener Community.</p>
+          </div>
+          <div class="panel">
+            <h3>Event-Server</h3>
+            <p>Events, Minigames und Turniere. Hier misst du dich mit den anderen.</p>
+          </div>
+        </div>
+        <div class="feat">
+          <div><h3>Eigene Features</h3><p>Mechaniken, die du auf anderen Servern nicht findest.</p></div>
+          <div><h3>Aktive Community</h3><p>Das Team ist auf Discord für dich erreichbar.</p></div>
+          <div><h3>Kostenlos</h3><p>Alles ist frei spielbar. Es gibt nichts zu kaufen.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="sec" id="join">
+      <h2>Beitreten</h2>
+      <ol class="steps">
+        <li><span class="num">1</span><h3>Minecraft starten</h3><p>Öffne Minecraft Java Edition.</p></li>
+        <li><span class="num">2</span><h3>Server hinzufügen</h3><p>Mehrspieler, dann Server hinzufügen, und <b>astralsmp.net</b> eintragen.</p></li>
+        <li><span class="num">3</span><h3>Loslegen</h3><p>Regeln lesen und auf Discord vorbeischauen.</p></li>
+      </ol>
+    </section>
+
+    <section class="sec" id="rules">
+      <h2>Regeln</h2>
+      <ul class="rules">
+        <li>Leichte Beleidigungen sind erlaubt. Echtes Mobbing, Hass und Drohungen nicht.</li>
+        <li>Griefing ist erlaubt. Du darfst fremde Bauten zerstören.</li>
+        <li>Keine Hacks, Cheats oder unfairen Mods.</li>
+        <li>Kein Spam und keine Werbung für andere Server.</li>
+        <li>Den Anweisungen des Teams ist Folge zu leisten.</li>
+      </ul>
+    </section>
+
+    <section class="sec" id="faq" style="border-bottom:0">
+      <h2>Fragen</h2>
+      <div class="faq">
+        <details><summary>Kostet der Server etwas?</summary><p>Nein. Beide Server sind kostenlos und es gibt keine kaufbaren Vorteile.</p></details>
+        <details><summary>Wie werde ich ins Team aufgenommen?</summary><p>Schreib uns auf Discord, wenn du Teil des Teams werden möchtest.</p></details>
+        <details><summary>Was mache ich bei einem Problem?</summary><p>Schreib uns auf Discord. Das Team hilft dir weiter.</p></details>
+      </div>
+    </section>
   </div>
-</section>
 
-<section id="rules">
-  <div class="wrap">
-    <h2>Regeln</h2>
-    <p class="sub">Damit alle Spaß haben, gelten diese Regeln. Passe sie an deinen Server an.</p>
-    <ol class="rules">
-      <li>Leichte Beleidigungen sind erlaubt. Echtes Mobbing, Hass und Drohungen nicht.</li>
-      <li>Griefing ist erlaubt. Du darfst fremde Bauten zerstören.</li>
-      <li>Keine Hacks, Cheats oder unfairen Mods.</li>
-      <li>Kein Spam und keine Werbung für andere Server.</li>
-      <li>Den Anweisungen des Teams ist Folge zu leisten.</li>
-    </ol>
-  </div>
-</section>
-
-<section id="faq">
-  <div class="wrap">
-    <h2>Häufige Fragen</h2>
-    <p class="sub">Kurze Antworten auf das, was Spieler am häufigsten fragen.</p>
-    <details><summary>Kostet der Server etwas?</summary><p>Nein. Beide Server sind kostenlos und es gibt keine kaufbaren Vorteile.</p></details>
-    <details><summary>Wie werde ich ins Team aufgenommen?</summary><p>Schreib uns auf Discord, wenn du Teil des Teams werden möchtest.</p></details>
-    <details><summary>Was mache ich bei einem Problem?</summary><p>Schreibe uns auf Discord. Das Team hilft dir weiter.</p></details>
-  </div>
-</section>
-
-<section id="contact" style="border-bottom:0">
-  <div class="wrap">
-    <h2>Komm in die Community</h2>
-    <p class="sub">Neuigkeiten, Support und Mitspieler findest du auf unseren Kanälen.</p>
-    <div class="links">
-      <a class="btn main" href="https://discord.gg/74FPNwA3fn" target="_blank" rel="noopener">Discord beitreten</a>
-      <a class="btn" href="https://www.tiktok.com/@astralsmp.net" target="_blank" rel="noopener">TikTok</a>
+  <div class="band" id="contact">
+    <div class="wrap">
+      <div>
+        <h2>Schreib uns auf Discord.</h2>
+        <p>Fragen, Bewerbungen oder einfach mal reinschauen.</p>
+      </div>
+      <div class="btns">
+        <a class="btn solid" href="https://discord.gg/74FPNwA3fn" target="_blank" rel="noopener">Discord beitreten</a>
+        <a class="btn" href="https://www.tiktok.com/@astralsmp.net" target="_blank" rel="noopener">TikTok</a>
+      </div>
     </div>
   </div>
-</section>
+</main>
 
 <footer>
-  <div class="wrap">© 2026 AstralSMP. Nicht mit Mojang oder Microsoft verbunden.</div>
+  <div class="wrap">
+    <span>© 2026 AstralSMP</span>
+    <span>Nicht mit Mojang oder Microsoft verbunden.</span>
+  </div>
 </footer>
 
 <script>
+var NEWS = [
+  { datum: "22.11.2026", titel: "Server-Release gegen Anfang Dezember", text: "Der Release von AstralSMP ist gegen Anfang Dezember geplant.", wichtig: true }
+];
+var INFOS = [
+  { titel: "Wer steckt dahinter?", text: "AstralSMP wird von Toxic_EU allein gemacht. Das Ziel ist ein Server, der jedem Spaß macht." },
+  { titel: "Support", text: "Bei Fragen oder Problemen schreib uns auf Discord." },
+  { titel: "Neu hier?", text: "Lies kurz die Regeln, bevor du loslegst." }
+];
+</script>
+<script>
 (function(){
+  function el(t,c,x){var e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e}
+  var nl=document.getElementById('news-list');
+  if(NEWS.length){NEWS.forEach(function(n){
+    var a=el('article','news');
+    var m=el('div','meta');m.appendChild(el('span',null,n.datum||''));
+    if(n.wichtig)m.appendChild(el('span','badge','Wichtig'));
+    a.appendChild(m);
+    var b=el('div');b.appendChild(el('h3',null,n.titel||''));
+    if(n.text)b.appendChild(el('p',null,n.text));
+    if(n.link){var l=el('a','more','Mehr erfahren');l.href=n.link;l.target='_blank';l.rel='noopener';b.appendChild(l)}
+    a.appendChild(b);nl.appendChild(a)
+  })}else{nl.appendChild(el('p','empty','Noch keine News.'))}
+  var il=document.getElementById('info-list');
+  if(INFOS.length){INFOS.forEach(function(i){var d=el('div','info');d.appendChild(el('h3',null,i.titel||''));d.appendChild(el('p',null,i.text||''));il.appendChild(d)})}else{document.getElementById('infos').hidden=true}
   var btn=document.getElementById('copy'),ip=document.getElementById('ip');
   btn.addEventListener('click',function(){
     var t=ip.textContent.trim();
-    function done(){btn.textContent='Kopiert';setTimeout(function(){btn.textContent='IP kopieren'},1600)}
-    try{navigator.clipboard.writeText(t).then(done,function(){sel()})}catch(e){sel()}
+    function done(){btn.textContent='Kopiert';setTimeout(function(){btn.textContent='Kopieren'},1600)}
     function sel(){var r=document.createRange();r.selectNodeContents(ip);var s=getSelection();s.removeAllRanges();s.addRange(r);btn.textContent='Markiert'}
+    try{navigator.clipboard.writeText(t).then(done,sel)}catch(e){sel()}
   });
 })();
 </script>
