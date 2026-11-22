@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AstralSMP – Minecraft Netzwerk</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@500;700&family=Nunito:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#120d1f; --panel:#1c1530; --line:#33275a; --text:#ece6fa; --muted:#a99ccb;
+  --accent:#a66bff; --accent-ink:#12082a; --shade:#7a3fe0;
+  color-scheme:dark;
+  box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: light){
+  :root:not([data-theme="dark"]){--bg:#f4f0fb;--panel:#ffffff;--line:#d8cdf0;--text:#1f1533;--muted:#6a5c8a;--accent:#7a3fe0;--accent-ink:#fff;--shade:#5a2bb0;color-scheme:light}
+}
+:root[data-theme="light"]{--bg:#f4f0fb;--panel:#ffffff;--line:#d8cdf0;--text:#1f1533;--muted:#6a5c8a;--accent:#7a3fe0;--accent-ink:#fff;--shade:#5a2bb0;color-scheme:light}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:70px;scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);font:400 17px/1.65 Nunito,system-ui,sans-serif}
+h1,h2,h3{font-family:'Pixelify Sans',monospace,sans-serif;font-weight:700;line-height:1.15;margin:0}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+.wrap{max-width:960px;margin:0 auto;padding:0 20px}
+
+nav{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:2px solid var(--line)}
+nav .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;height:58px;overflow-x:auto}
+.logo{font-family:'Pixelify Sans',monospace;font-weight:700;font-size:22px;text-decoration:none;white-space:nowrap}
+.logo span{color:var(--accent)}
+nav ul{display:flex;gap:20px;list-style:none;margin:0;padding:0}
+nav li a{text-decoration:none;color:var(--muted);font-weight:600;white-space:nowrap}
+nav li a:hover{color:var(--text)}
+
+.hero{padding:72px 0 56px;border-bottom:2px solid var(--line);
+  background:
+    linear-gradient(var(--bg) 0 0) padding-box,
+    repeating-linear-gradient(90deg,transparent 0 47px,var(--line) 47px 48px);
+  background-blend-mode:normal}
+.hero h1{font-size:clamp(38px,8vw,72px);max-width:12ch}
+.hero p.lead{max-width:48ch;color:var(--muted);font-size:19px;margin:18px 0 32px}
+.ip{display:flex;flex-wrap:wrap;align-items:stretch;gap:0;max-width:520px;border:3px solid var(--accent);background:var(--panel)}
+.ip code{flex:1;min-width:180px;padding:14px 18px;font:700 22px 'Pixelify Sans',monospace;display:flex;align-items:center}
+.ip button{border:0;background:var(--accent);color:var(--accent-ink);font:700 18px 'Pixelify Sans',monospace;padding:0 22px;min-height:52px;cursor:pointer;border-left:3px solid var(--accent);box-shadow:inset 0 -5px 0 var(--shade)}
+.ip button:active{transform:translateY(2px)}
+.status{margin-top:14px;color:var(--muted);font-size:15px}
+.dot{display:inline-block;width:10px;height:10px;background:var(--accent);margin-right:8px}
+
+section{padding:64px 0;border-bottom:2px solid var(--line)}
+section h2{font-size:clamp(28px,5vw,40px);margin-bottom:10px}
+section .sub{color:var(--muted);max-width:56ch;margin:0 0 32px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px}
+.card{background:var(--panel);border:2px solid var(--line);padding:22px;box-shadow:5px 5px 0 var(--line)}
+.card h3{font-size:21px;margin-bottom:8px}
+.card p{margin:0;color:var(--muted)}
+
+ol.rules{margin:0;padding:0;list-style:none;counter-reset:r;display:grid;gap:12px;max-width:680px}
+ol.rules li{counter-increment:r;display:flex;gap:16px;background:var(--panel);border:2px solid var(--line);padding:16px 18px}
+ol.rules li::before{content:counter(r);font:700 22px 'Pixelify Sans',monospace;color:var(--accent);min-width:1.4em}
+
+.steps{display:grid;gap:12px;max-width:680px;margin:0;padding:0;list-style:none}
+.steps li{background:var(--panel);border:2px solid var(--line);padding:16px 18px}
+.steps b{font-family:'Pixelify Sans',monospace;font-size:19px}
+
+details{background:var(--panel);border:2px solid var(--line);padding:14px 18px;max-width:680px;margin-bottom:10px}
+summary{cursor:pointer;font-weight:800}
+details p{margin:10px 0 0;color:var(--muted)}
+
+.links{display:flex;flex-wrap:wrap;gap:14px}
+.btn{display:inline-block;text-decoration:none;font:700 18px 'Pixelify Sans',monospace;padding:13px 22px;border:3px solid var(--accent);color:var(--text);background:var(--panel)}
+.btn.main{background:var(--accent);color:var(--accent-ink);box-shadow:inset 0 -5px 0 var(--shade)}
+.btn:hover{filter:brightness(1.1)}
+
+footer{padding:34px 0;color:var(--muted);font-size:14px}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+@media (max-width:640px){nav ul{gap:14px}.hero{padding:48px 0 40px}section{padding:48px 0}}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="logo" href="#top">Astral<span>SMP</span></a>
+    <ul>
+      <li><a href="#about">Server</a></li>
+      <li><a href="#join">Beitreten</a></li>
+      <li><a href="#rules">Regeln</a></li>
+      <li><a href="#faq">FAQ</a></li>
+      <li><a href="#contact">Kontakt</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="wrap">
+    <h1>AstralSMP</h1>
+    <p class="lead">Unser Netzwerk mit SMP- und Event-Server, eigenen Features und einer aktiven Community.</p>
+    <div class="ip">
+      <code id="ip">astralsmp.net</code>
+      <button id="copy" type="button">IP kopieren</button>
+    </div>
+    <div class="status"><span class="dot"></span>Java Edition · SMP &amp; Events</div>
+  </div>
+</header>
+
+<section id="about">
+  <div class="wrap">
+    <h2>Unsere Server</h2>
+    <p class="sub">AstralSMP besteht aus zwei Servern. Beide erreichst du über dieselbe Adresse.</p>
+    <div class="grid">
+      <div class="card"><h3>SMP-Server</h3><p>Ein Survival-Multiplayer im Stil bekannter YouTuber-SMPs, aber mit eigenen Features, Story und Community.</p></div>
+      <div class="card"><h3>Event-Server</h3><p>Regelmäßige Events, Minigames und Turniere. Hier gewinnst du Ruhm und Belohnungen.</p></div>
+      <div class="card"><h3>Eigene Features</h3><p>Eigene Features und Mechaniken, die du so auf keinem anderen Server findest.</p></div>
+      <div class="card"><h3>Fair</h3><p>Anti-Cheat und regelmäßige Backups. Alles ist frei spielbar, es gibt nichts zu kaufen.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="join">
+  <div class="wrap">
+    <h2>So trittst du bei</h2>
+    <p class="sub">In drei Schritten bist du auf dem Server.</p>
+    <ol class="steps">
+      <li><b>Minecraft starten</b><br>Öffne Minecraft Java Edition.</li>
+      <li><b>Server hinzufügen</b><br>Mehrspieler → Server hinzufügen → die IP <b>astralsmp.net</b> eintragen.</li>
+      <li><b>Regeln lesen und loslegen</b><br>Schau kurz in die Regeln und tritt danach unserem Discord bei.</li>
+    </ol>
+  </div>
+</section>
+
+<section id="rules">
+  <div class="wrap">
+    <h2>Regeln</h2>
+    <p class="sub">Damit alle Spaß haben, gelten diese Regeln. Passe sie an deinen Server an.</p>
+    <ol class="rules">
+      <li>Leichte Beleidigungen sind erlaubt. Echtes Mobbing, Hass und Drohungen nicht.</li>
+      <li>Griefing ist erlaubt. Du darfst fremde Bauten zerstören.</li>
+      <li>Keine Hacks, Cheats oder unfairen Mods.</li>
+      <li>Kein Spam und keine Werbung für andere Server.</li>
+      <li>Den Anweisungen des Teams ist Folge zu leisten.</li>
+    </ol>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="wrap">
+    <h2>Häufige Fragen</h2>
+    <p class="sub">Kurze Antworten auf das, was Spieler am häufigsten fragen.</p>
+    <details><summary>Kostet der Server etwas?</summary><p>Nein. Beide Server sind kostenlos und es gibt keine kaufbaren Vorteile.</p></details>
+    <details><summary>Wie werde ich ins Team aufgenommen?</summary><p>Schreib uns auf Discord, wenn du Teil des Teams werden möchtest.</p></details>
+    <details><summary>Was mache ich bei einem Problem?</summary><p>Schreibe uns auf Discord. Das Team hilft dir weiter.</p></details>
+  </div>
+</section>
+
+<section id="contact" style="border-bottom:0">
+  <div class="wrap">
+    <h2>Komm in die Community</h2>
+    <p class="sub">Neuigkeiten, Support und Mitspieler findest du auf unseren Kanälen.</p>
+    <div class="links">
+      <a class="btn main" href="https://discord.gg/74FPNwA3fn" target="_blank" rel="noopener">Discord beitreten</a>
+      <a class="btn" href="https://www.tiktok.com/@astralsmp.net" target="_blank" rel="noopener">TikTok</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">© 2026 AstralSMP. Nicht mit Mojang oder Microsoft verbunden.</div>
+</footer>
+
+<script>
+(function(){
+  var btn=document.getElementById('copy'),ip=document.getElementById('ip');
+  btn.addEventListener('click',function(){
+    var t=ip.textContent.trim();
+    function done(){btn.textContent='Kopiert';setTimeout(function(){btn.textContent='IP kopieren'},1600)}
+    try{navigator.clipboard.writeText(t).then(done,function(){sel()})}catch(e){sel()}
+    function sel(){var r=document.createRange();r.selectNodeContents(ip);var s=getSelection();s.removeAllRanges();s.addRange(r);btn.textContent='Markiert'}
+  });
+})();
+</script>
+</body>
+</html>
