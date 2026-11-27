@@ -9,6 +9,7 @@
 <meta name="theme-color" content="#13101a">
 <meta property="og:title" content="AstralSMP – Minecraft Netzwerk">
 <meta property="og:description" content="SMP- und Event-Server mit eigenen Features. Server-IP: astralsmp.net">
+<script>try{var _t=localStorage.getItem('theme');if(_t==='light'||_t==='dark')document.documentElement.setAttribute('data-theme',_t)}catch(e){}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@500;700&display=swap" rel="stylesheet">
 <style>
@@ -38,10 +39,15 @@ header.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;backgroun
 .nav .wrap{display:flex;align-items:center;justify-content:space-between;height:62px;gap:24px}
 .logo{font-size:24px;color:var(--text);text-decoration:none}
 .nav nav{display:flex;align-items:center;gap:26px;font-size:15px}
-.nav nav a{color:var(--muted);text-decoration:none}
-.nav nav a:hover{color:var(--text)}
+.nav nav>a{color:var(--muted);text-decoration:none}
+.nav nav>a:hover{color:var(--text)}
 .nav nav a.pill{background:var(--accent);color:var(--on-accent);padding:8px 16px;border-radius:2px;font-weight:700}
 .nav nav a.pill:hover{background:#8a52ea;color:var(--on-accent)}
+.tools{display:flex;align-items:center;gap:4px}
+.tools button{background:transparent;border:1px solid var(--line);color:var(--muted);font:600 13px system-ui,sans-serif;padding:5px 9px;border-radius:2px;cursor:pointer}
+.tools button:hover{color:var(--text);border-color:var(--muted)}
+.tools button.on{color:var(--accent);border-color:var(--accent)}
+.tools #theme{margin-left:8px;min-width:62px}
 
 .btn{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:0 24px;border-radius:2px;font:700 16px system-ui,sans-serif;text-decoration:none;border:2px solid var(--accent);color:var(--accent);background:transparent;cursor:pointer}
 .btn:hover{background:var(--accent);color:var(--on-accent)}
@@ -122,7 +128,11 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
   .panels{grid-template-columns:1fr}
   .news{grid-template-columns:1fr;gap:6px}
   ul.rules li{grid-template-columns:1fr;gap:4px}
-  .nav nav a:not(.pill){display:none}
+  .nav nav>a:not(.pill){display:none}
+}
+@media (max-width:560px){
+  .nav nav a.pill{display:none}
+  .nav .wrap{gap:12px}
 }
 </style>
 </head>
@@ -134,13 +144,18 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
   <div class="wrap">
     <a class="logo" href="#top">AstralSMP</a>
     <nav>
-      <a href="#news">News</a>
-      <a href="#infos">Infos</a>
-      <a href="#server">Server</a>
-      <a href="#join">Beitreten</a>
-      <a href="#rules">Regeln</a>
-      <a href="#faq">Fragen</a>
+      <a href="#news" data-en="News">News</a>
+      <a href="#infos" data-en="Info">Infos</a>
+      <a href="#server" data-en="Servers">Server</a>
+      <a href="#join" data-en="Join">Beitreten</a>
+      <a href="#rules" data-en="Rules">Regeln</a>
+      <a href="#faq" data-en="FAQ">Fragen</a>
       <a class="pill" href="https://discord.gg/74FPNwA3fn" target="_blank" rel="noopener">Discord</a>
+      <div class="tools">
+        <button type="button" data-lang="de" aria-label="Deutsch">DE</button>
+        <button type="button" data-lang="en" aria-label="English">EN</button>
+        <button type="button" id="theme">Hell</button>
+      </div>
     </nav>
   </div>
 </header>
@@ -149,13 +164,13 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
   <div class="hero">
     <div class="wrap">
       <h1>AstralSMP</h1>
-      <p class="lead">Ein Minecraft-Netzwerk mit SMP und Events. Kostenlos, ohne Pay-to-Win, und es soll jedem Spaß machen.</p>
+      <p class="lead" data-en="A Minecraft network with an SMP and events. Free, no pay-to-win, and meant to be fun for everyone.">Ein Minecraft-Netzwerk mit SMP und Events. Kostenlos, ohne Pay-to-Win, und es soll jedem Spaß machen.</p>
       <div class="actions">
         <div class="ip">
           <code id="ip">astralsmp.net</code>
-          <button id="copy" type="button">Kopieren</button>
+          <button id="copy" type="button" data-en="Copy">Kopieren</button>
         </div>
-        <a class="btn" href="https://discord.gg/74FPNwA3fn" target="_blank" rel="noopener">Discord beitreten</a>
+        <a class="btn" href="https://discord.gg/74FPNwA3fn" target="_blank" rel="noopener" data-en="Join Discord">Discord beitreten</a>
       </div>
       <p class="hint">Minecraft Java Edition</p>
     </div>
@@ -170,66 +185,66 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
 
   <section class="sec" id="infos">
     <div class="wrap">
-      <h2>Infos</h2>
+      <h2 data-en="Info">Infos</h2>
       <div class="infos" id="info-list"></div>
     </div>
   </section>
 
   <section id="server">
     <div class="wrap">
-      <h2>Server</h2>
+      <h2 data-en="Servers">Server</h2>
       <div class="panels">
         <div class="panel">
-          <h3>SMP-Server</h3>
-          <p>Survival-Multiplayer im Stil der bekannten YouTuber-SMPs, aber mit eigenen Features und eigener Community.</p>
+          <h3 data-en="SMP server">SMP-Server</h3>
+          <p data-en="Survival multiplayer in the style of well-known YouTuber SMPs, but with our own features and our own community.">Survival-Multiplayer im Stil der bekannten YouTuber-SMPs, aber mit eigenen Features und eigener Community.</p>
         </div>
         <div class="panel">
-          <h3>Event-Server</h3>
-          <p>Events, Minigames und Turniere für alle, die sich messen wollen.</p>
+          <h3 data-en="Event server">Event-Server</h3>
+          <p data-en="Events, minigames and tournaments for everyone who wants to compete.">Events, Minigames und Turniere für alle, die sich messen wollen.</p>
         </div>
       </div>
-      <p class="note">Beide Server sind kostenlos. Es gibt nichts zu kaufen.</p>
+      <p class="note" data-en="Both servers are free. There is nothing to buy.">Beide Server sind kostenlos. Es gibt nichts zu kaufen.</p>
     </div>
   </section>
 
   <section id="join">
     <div class="wrap">
-      <h2>Beitreten</h2>
+      <h2 data-en="Join">Beitreten</h2>
       <ol class="path">
-        <li>Minecraft Java starten</li>
-        <li>Mehrspieler</li>
-        <li>Server hinzufügen</li>
+        <li data-en="Start Minecraft Java">Minecraft Java starten</li>
+        <li data-en="Multiplayer">Mehrspieler</li>
+        <li data-en="Add Server">Server hinzufügen</li>
         <li>astralsmp.net</li>
       </ol>
-      <p class="after">Danach noch kurz die Regeln lesen und auf Discord vorbeischauen.</p>
+      <p class="after" data-en="Then read the rules quickly and drop by on Discord.">Danach noch kurz die Regeln lesen und auf Discord vorbeischauen.</p>
     </div>
   </section>
 
   <section id="rules">
     <div class="wrap">
-      <h2>Regeln</h2>
+      <h2 data-en="Rules">Regeln</h2>
       <ul class="rules">
-        <li><span class="tag ok">Erlaubt</span><span>Griefing. Du darfst fremde Bauten zerstören.</span></li>
-        <li><span class="tag ok">Erlaubt</span><span>Leichte Beleidigungen.</span></li>
-        <li><span class="tag no">Verboten</span><span>Echtes Mobbing, Hass und Drohungen.</span></li>
-        <li><span class="tag no">Verboten</span><span>Hacks, Cheats und unfaire Mods.</span></li>
-        <li><span class="tag no">Verboten</span><span>Spam und Werbung für andere Server.</span></li>
-        <li><span class="tag">Pflicht</span><span>Den Anweisungen des Teams folgen.</span></li>
+        <li><span class="tag ok" data-en="Allowed">Erlaubt</span><span data-en="Griefing. You may destroy other players’ builds.">Griefing. Du darfst fremde Bauten zerstören.</span></li>
+        <li><span class="tag ok" data-en="Allowed">Erlaubt</span><span data-en="Light insults.">Leichte Beleidigungen.</span></li>
+        <li><span class="tag no" data-en="Forbidden">Verboten</span><span data-en="Real bullying, hate and threats.">Echtes Mobbing, Hass und Drohungen.</span></li>
+        <li><span class="tag no" data-en="Forbidden">Verboten</span><span data-en="Hacks, cheats and unfair mods.">Hacks, Cheats und unfaire Mods.</span></li>
+        <li><span class="tag no" data-en="Forbidden">Verboten</span><span data-en="Spam and advertising for other servers.">Spam und Werbung für andere Server.</span></li>
+        <li><span class="tag" data-en="Required">Pflicht</span><span data-en="Follow the team’s instructions.">Den Anweisungen des Teams folgen.</span></li>
       </ul>
     </div>
   </section>
 
   <section id="faq">
     <div class="wrap">
-      <h2>Fragen</h2>
+      <h2 data-en="FAQ">Fragen</h2>
       <div class="faq">
-        <details><summary>Wie komme ich auf den Server?</summary><p>Starte Minecraft Java Edition, geh auf Mehrspieler und dann auf Server hinzufügen. Trag dort astralsmp.net ein. Beide Server erreichst du über dieselbe Adresse.</p></details>
-        <details><summary>Wann startet der Server?</summary><p>Der Release ist gegen Anfang Dezember geplant. Sobald es etwas Neues gibt, steht es oben bei den News.</p></details>
-        <details><summary>Kostet der Server etwas?</summary><p>Nein. Alles ist kostenlos. Es gibt keinen Shop und keine kaufbaren Vorteile.</p></details>
-        <details><summary>Was ist der Unterschied zwischen SMP und Event-Server?</summary><p>Auf dem SMP-Server spielst du Survival zusammen mit der Community. Der Event-Server ist für Events, Minigames und Turniere gedacht.</p></details>
-        <details><summary>Darf ich Bauten von anderen zerstören?</summary><p>Ja, Griefing ist bei uns erlaubt. Hacks und Cheats bleiben trotzdem verboten, genauso wie echtes Mobbing, Hass und Drohungen.</p></details>
-        <details><summary>Wie werde ich ins Team aufgenommen?</summary><p>Erstelle im Discord ein passendes Ticket, wenn du Teil des Teams werden möchtest.</p></details>
-        <details><summary>Was mache ich bei einem Problem?</summary><p>Erstelle im Discord ein passendes Ticket. Das Team hilft dir dann weiter.</p></details>
+        <details><summary data-en="How do I get on the server?">Wie komme ich auf den Server?</summary><p data-en="Start Minecraft Java Edition, go to Multiplayer and then Add Server. Enter astralsmp.net there. You reach both servers with the same address.">Starte Minecraft Java Edition, geh auf Mehrspieler und dann auf Server hinzufügen. Trag dort astralsmp.net ein. Beide Server erreichst du über dieselbe Adresse.</p></details>
+        <details><summary data-en="When does the server start?">Wann startet der Server?</summary><p data-en="The release is planned for around the beginning of December. As soon as there is news, it will appear in the news section above.">Der Release ist gegen Anfang Dezember geplant. Sobald es etwas Neues gibt, steht es oben bei den News.</p></details>
+        <details><summary data-en="Does the server cost anything?">Kostet der Server etwas?</summary><p data-en="No. Everything is free. There is no shop and nothing to buy for an advantage.">Nein. Alles ist kostenlos. Es gibt keinen Shop und keine kaufbaren Vorteile.</p></details>
+        <details><summary data-en="What is the difference between the SMP and the event server?">Was ist der Unterschied zwischen SMP und Event-Server?</summary><p data-en="On the SMP server you play survival together with the community. The event server is meant for events, minigames and tournaments.">Auf dem SMP-Server spielst du Survival zusammen mit der Community. Der Event-Server ist für Events, Minigames und Turniere gedacht.</p></details>
+        <details><summary data-en="May I destroy other people’s builds?">Darf ich Bauten von anderen zerstören?</summary><p data-en="Yes, griefing is allowed here. Hacks and cheats are still forbidden, as are real bullying, hate and threats.">Ja, Griefing ist bei uns erlaubt. Hacks und Cheats bleiben trotzdem verboten, genauso wie echtes Mobbing, Hass und Drohungen.</p></details>
+        <details><summary data-en="How do I join the team?">Wie werde ich ins Team aufgenommen?</summary><p data-en="Create a matching ticket on Discord if you would like to become part of the team.">Erstelle im Discord ein passendes Ticket, wenn du Teil des Teams werden möchtest.</p></details>
+        <details><summary data-en="What do I do if I have a problem?">Was mache ich bei einem Problem?</summary><p data-en="Create a matching ticket on Discord. The team will then help you.">Erstelle im Discord ein passendes Ticket. Das Team hilft dir dann weiter.</p></details>
       </div>
     </div>
   </section>
@@ -237,11 +252,11 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
   <div class="cta" id="contact">
     <div class="wrap">
       <div>
-        <h2>Schreib uns auf Discord.</h2>
-        <p>Fragen, Bewerbungen oder einfach mal reinschauen.</p>
+        <h2 data-en="Talk to us on Discord.">Schreib uns auf Discord.</h2>
+        <p data-en="Questions, applications or just stop by.">Fragen, Bewerbungen oder einfach mal reinschauen.</p>
       </div>
       <div class="btns">
-        <a class="btn solid" href="https://discord.gg/74FPNwA3fn" target="_blank" rel="noopener">Discord beitreten</a>
+        <a class="btn solid" href="https://discord.gg/74FPNwA3fn" target="_blank" rel="noopener" data-en="Join Discord">Discord beitreten</a>
         <a class="btn" href="https://www.tiktok.com/@astralsmp.net" target="_blank" rel="noopener">TikTok</a>
       </div>
     </div>
@@ -251,55 +266,110 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
 <footer>
   <div class="wrap">
     <span>© 2026 AstralSMP</span>
-    <span>Nicht mit Mojang oder Microsoft verbunden.</span>
+    <span data-en="Not affiliated with Mojang or Microsoft.">Nicht mit Mojang oder Microsoft verbunden.</span>
   </div>
 </footer>
 
 <!-- ===== HIER BEARBEITEN: News und Infos =====
   News: neue Einträge ganz oben in die Liste NEWS einfügen (neueste zuerst).
-  Aufbau: { datum: "TT.MM.JJJJ", titel: "...", text: "...", wichtig: true oder false }
+  Aufbau: { datum: "TT.MM.JJJJ", titel: "...", text: "...", titel_en: "...", text_en: "...", wichtig: true oder false }
+  titel_en und text_en sind die englischen Texte. Fehlen sie, wird auch auf Englisch der deutsche Text angezeigt.
   Optional: link: "https://..." zeigt einen Mehr-Link an. Zwischen den Einträgen steht ein Komma.
   Die erste News mit wichtig: true erscheint zusätzlich als Streifen ganz oben auf der Seite.
-  Infos: Einträge in der Liste INFOS mit { titel: "...", text: "..." }. Ist die Liste leer, wird der Bereich ausgeblendet. -->
+  Infos: Einträge in der Liste INFOS mit { titel: "...", text: "...", titel_en: "...", text_en: "..." }. Ist die Liste leer, wird der Bereich ausgeblendet. -->
 <script>
 var NEWS = [
-  { datum: "22.11.2026", titel: "Server-Release gegen Anfang Dezember", text: "Der Release von AstralSMP ist gegen Anfang Dezember geplant.", wichtig: true }
+  { datum: "22.11.2026", titel: "Server-Release gegen Anfang Dezember", text: "Der Release von AstralSMP ist gegen Anfang Dezember geplant.", titel_en: "Server release around the beginning of December", text_en: "The release of AstralSMP is planned for around the beginning of December.", wichtig: true }
 ];
 var INFOS = [
-  { titel: "Wer steckt dahinter?", text: "AstralSMP wird von Toxic_EU allein entwickelt. Das Ziel ist ein Server, der jedem Spaß macht." },
-  { titel: "Support", text: "Bei Fragen oder Problemen erstelle im Discord ein passendes Ticket." },
-  { titel: "Neu hier?", text: "Lies kurz die Regeln, bevor du loslegst." }
+  { titel: "Wer steckt dahinter?", text: "AstralSMP wird von Toxic_EU allein entwickelt. Das Ziel ist ein Server, der jedem Spaß macht.", titel_en: "Who is behind it?", text_en: "AstralSMP is developed by Toxic_EU alone. The goal is a server that is fun for everyone." },
+  { titel: "Support", text: "Bei Fragen oder Problemen erstelle im Discord ein passendes Ticket.", titel_en: "Support", text_en: "If you have questions or problems, create a matching ticket on Discord." },
+  { titel: "Neu hier?", text: "Lies kurz die Regeln, bevor du loslegst.", titel_en: "New here?", text_en: "Read the rules quickly before you start." }
 ];
 </script>
 <script>
 (function(){
   function el(t,c,x){var e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e}
+  function clear(n){while(n.firstChild)n.removeChild(n.firstChild)}
+  var root=document.documentElement,LANG='de';
+  try{if(localStorage.getItem('lang')==='en')LANG='en'}catch(e){}
+  function T(de,en){return LANG==='en'?en:de}
+  function pick(o,k){return (LANG==='en'&&o[k+'_en'])?o[k+'_en']:o[k]}
 
-  var nl=document.getElementById('news-list');
-  if(NEWS.length){NEWS.forEach(function(n){
-    var a=el('article','news');
-    var d=el('p','date',n.datum||'');
-    if(n.wichtig)d.appendChild(el('b',null,'Wichtig'));
-    a.appendChild(d);
-    var b=el('div');b.appendChild(el('h3',null,n.titel||''));
-    if(n.text)b.appendChild(el('p',null,n.text));
-    if(n.link){var l=el('a','more','Mehr erfahren');l.href=n.link;l.target='_blank';l.rel='noopener';b.appendChild(l)}
-    a.appendChild(b);nl.appendChild(a)
-  })}else{nl.appendChild(el('p','empty','Noch keine News.'))}
+  var stat=[].slice.call(document.querySelectorAll('[data-en]'));
+  stat.forEach(function(e){e.setAttribute('data-de',e.textContent)});
+  var nl=document.getElementById('news-list'),il=document.getElementById('info-list'),isec=document.getElementById('infos'),tb=document.getElementById('topbar');
+  var btn=document.getElementById('copy'),ip=document.getElementById('ip'),th=document.getElementById('theme');
+  var langBtns=[].slice.call(document.querySelectorAll('[data-lang]'));
 
-  var il=document.getElementById('info-list');
-  if(INFOS.length){INFOS.forEach(function(i){var d=el('div','info');d.appendChild(el('h3',null,i.titel||''));d.appendChild(el('p',null,i.text||''));il.appendChild(d)})}else{document.getElementById('infos').hidden=true}
+  function renderNews(){
+    clear(nl);
+    if(!NEWS.length){nl.appendChild(el('p','empty',T('Noch keine News.','No news yet.')));return}
+    NEWS.forEach(function(n){
+      var a=el('article','news');
+      var d=el('p','date',n.datum||'');
+      if(n.wichtig)d.appendChild(el('b',null,T('Wichtig','Important')));
+      a.appendChild(d);
+      var b=el('div');b.appendChild(el('h3',null,pick(n,'titel')||''));
+      if(n.text)b.appendChild(el('p',null,pick(n,'text')));
+      if(n.link){var l=el('a','more',T('Mehr erfahren','Read more'));l.href=n.link;l.target='_blank';l.rel='noopener';b.appendChild(l)}
+      a.appendChild(b);nl.appendChild(a)
+    });
+  }
+  function renderInfos(){
+    clear(il);
+    if(!INFOS.length){isec.hidden=true;return}
+    isec.hidden=false;
+    INFOS.forEach(function(i){var d=el('div','info');d.appendChild(el('h3',null,pick(i,'titel')||''));d.appendChild(el('p',null,pick(i,'text')||''));il.appendChild(d)});
+  }
+  function renderTop(){
+    clear(tb);
+    var top=NEWS.filter(function(n){return n.wichtig})[0];
+    if(!top){tb.hidden=true;return}
+    tb.appendChild(document.createTextNode(T('Wichtig: ','Important: ')+pick(top,'titel')+' · '));
+    var ml=el('a',null,T('Zu den News','Go to news'));ml.href='#news';tb.appendChild(ml);tb.hidden=false;
+  }
+  function effTheme(){
+    var t=root.getAttribute('data-theme');
+    if(t)return t;
+    return (window.matchMedia&&matchMedia('(prefers-color-scheme: light)').matches)?'light':'dark';
+  }
+  function updTheme(){
+    var dark=effTheme()==='dark';
+    th.textContent=dark?T('Hell','Light'):T('Dunkel','Dark');
+    th.setAttribute('aria-label',dark?T('Helles Design aktivieren','Switch to light mode'):T('Dunkles Design aktivieren','Switch to dark mode'));
+  }
+  function applyLang(){
+    root.lang=LANG;
+    stat.forEach(function(e){e.textContent=e.getAttribute(LANG==='en'?'data-en':'data-de')});
+    document.title=T('AstralSMP – Minecraft Netzwerk','AstralSMP – Minecraft Network');
+    var md=document.querySelector('meta[name="description"]');
+    if(md)md.setAttribute('content',T('AstralSMP: Minecraft-Netzwerk mit SMP- und Event-Server. Server-IP: astralsmp.net','AstralSMP: Minecraft network with an SMP and an event server. Server IP: astralsmp.net'));
+    langBtns.forEach(function(b){b.classList.toggle('on',b.getAttribute('data-lang')===LANG)});
+    renderNews();renderInfos();renderTop();updTheme();
+  }
 
-  var top=NEWS.filter(function(n){return n.wichtig})[0],tb=document.getElementById('topbar');
-  if(top){tb.appendChild(document.createTextNode('Wichtig: '+top.titel+' · '));var ml=el('a',null,'Zu den News');ml.href='#news';tb.appendChild(ml);tb.hidden=false}
+  langBtns.forEach(function(b){b.addEventListener('click',function(){
+    LANG=b.getAttribute('data-lang');
+    try{localStorage.setItem('lang',LANG)}catch(e){}
+    applyLang();
+  })});
+  th.addEventListener('click',function(){
+    var next=effTheme()==='dark'?'light':'dark';
+    root.setAttribute('data-theme',next);
+    try{localStorage.setItem('theme',next)}catch(e){}
+    updTheme();
+  });
 
-  var btn=document.getElementById('copy'),ip=document.getElementById('ip');
   btn.addEventListener('click',function(){
     var t=ip.textContent.trim();
-    function done(){btn.textContent='Kopiert';setTimeout(function(){btn.textContent='Kopieren'},1600)}
-    function sel(){var r=document.createRange();r.selectNodeContents(ip);var s=getSelection();s.removeAllRanges();s.addRange(r);btn.textContent='Markiert'}
+    function rest(){btn.textContent=btn.getAttribute(LANG==='en'?'data-en':'data-de')}
+    function done(){btn.textContent=T('Kopiert','Copied');setTimeout(rest,1600)}
+    function sel(){var r=document.createRange();r.selectNodeContents(ip);var s=getSelection();s.removeAllRanges();s.addRange(r);btn.textContent=T('Markiert','Selected');setTimeout(rest,1600)}
     try{navigator.clipboard.writeText(t).then(done,sel)}catch(e){sel()}
   });
+
+  applyLang();
 })();
 </script>
 </body>
